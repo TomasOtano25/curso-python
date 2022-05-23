@@ -45,6 +45,7 @@ pyi-makespec catalogo_peliculas.py --windowed
 Luego de modificado el .spec:
 
 pyinstaller catalogo_peliculas.spec
+
 ```
 
 En nuestro archivo `.spec`:
