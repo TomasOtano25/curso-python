@@ -31,3 +31,24 @@ git push -u origin main
 ## Link
 
 https://htmlcolorcodes.com/es/
+
+
+# Distribucion y ejecutable
+
+```
+env/Scripts/activate
+
+pip install pyinstaller
+
+pyi-makespec catalogo_peliculas.py --windowed
+
+Luego de modificado el .spec:
+
+pyinstaller catalogo_peliculas.spec
+```
+
+En nuestro archivo `.spec`:
+
+```
+datas=[('./img/*ico', 'img'), ('./database/*.db', 'database')],
+```
