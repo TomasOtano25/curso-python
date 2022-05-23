@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from model.pelicula_dao import crear_tabla, borrar_tabla
-from model.pelicula_dao import Pelicula, guardar, listar, editar
+from model.pelicula_dao import Pelicula, guardar, listar, editar, eliminar
 
 def barra_menu(root):
     barra_menu = tk.Menu(root)
@@ -153,7 +153,7 @@ class Frame(tk.Frame):
         self.boton_editar.grid(row=5, column=0, padx=10, pady=10)
 
         # Boton de eliminar
-        self.boton_eliminar = tk.Button(self, text="Eliminar")
+        self.boton_eliminar = tk.Button(self, text="Eliminar", command=self.eliminar_datos)
         self.boton_eliminar.config(width=20, font=('Arial', 12, 'bold'), fg='#DAD5D6', bg='#BD152E', cursor='hand2',
                                    activebackground='#E15370')
         self.boton_eliminar.grid(row=5, column=1, padx=10, pady=10)
@@ -172,5 +172,18 @@ class Frame(tk.Frame):
             self.entry_genero.insert(0, self.genero_pelicula)
         except:
             titulo = 'Edicion de datos'
+            mensaje = 'No ha seleccionado ningun registro'
+            messagebox.showerror(titulo, mensaje)
+
+    def eliminar_datos(self):
+        try:
+            self.id_pelicula = self.tabla.item(self.tabla.selection())['text']
+            eliminar(self.id_pelicula)
+
+            self.tabla_peliculas()
+            # self.id_pelicula = None
+            self.desabilitar_campos()
+        except:
+            titulo = 'Eliminar un registro'
             mensaje = 'No ha seleccionado ningun registro'
             messagebox.showerror(titulo, mensaje)

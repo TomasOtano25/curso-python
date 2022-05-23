@@ -89,6 +89,7 @@ def listar():
 
     return lista_peliculas
 
+
 def editar(pelicula, id_pelicula):
     conexion = ConexionDB()
 
@@ -102,4 +103,18 @@ def editar(pelicula, id_pelicula):
     except:
         titulo = 'Edicion de datos'
         mensaje = 'No se a podido editar este registro'
-        messagebox.showerror(titulo, pelicula.nombre)
+        messagebox.showerror(titulo, mensaje)
+
+
+def eliminar(id_pelicula):
+    conexion = ConexionDB()
+
+    sql = f'DELETE FROM peliculas WHERE id_pelicula = {id_pelicula}'
+
+    try:
+        conexion.cursor.execute(sql)
+        conexion.cerrar()
+    except:
+        titulo = 'Eliminar Datos'
+        mensaje = 'NO se pudo eliminar el registro'
+        messagebox.showerror(titulo, mensaje)
