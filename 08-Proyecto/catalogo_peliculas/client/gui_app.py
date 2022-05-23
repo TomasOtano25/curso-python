@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from model.pelicula_dao import crear_tabla, borrar_tabla
+from model.pelicula_dao import Pelicula, guardar, listar
 
 def barra_menu(root):
     barra_menu = tk.Menu(root)
@@ -8,8 +10,8 @@ def barra_menu(root):
     menu_inicio = tk.Menu(barra_menu, tearoff=0)
     barra_menu.add_cascade(label='Inicio', menu=menu_inicio)
 
-    menu_inicio.add_command(label='Crear Registro en DB')
-    menu_inicio.add_command(label='Eliminar Registro en DB')
+    menu_inicio.add_command(label='Crear Registro en DB', command=crear_tabla)
+    menu_inicio.add_command(label='Eliminar Registro en DB', command=borrar_tabla)
     menu_inicio.add_command(label='Salir', command=root.destroy)
 
     barra_menu.add_cascade(label='Consultas')
@@ -98,21 +100,45 @@ class Frame(tk.Frame):
 
     def guardar_datos(self):
 
+        pelicula = Pelicula(
+            self.mi_nombre.get(),
+            self.mi_duracion.get(),
+            self.mi_genero.get()
+        )
+
+        guardar(pelicula)
+
+        self.tabla_peliculas()
+
         # Desabilitar campos
         self.desabilitar_campos()
 
     def tabla_peliculas(self):
+        # Recuperar la lista de peliculas
+        self.lista_peliculas = listar()
+        self.lista_peliculas.reverse()
+
         self.tabla = ttk.Treeview(self,
                                   columns=('Nombre', 'Duracion', 'Genero'))
-        self.tabla.grid(row=4, column=0, columnspan=4)
+        self.tabla.grid(row=4, column=0, columnspan=4, sticky='nse')
+
+        # Scrollbar para la tabla si exede 10 registros
+        self.scroll = ttk.Scrollbar(self,
+                                    orient='vertical', command=self.tabla.yview)
+        self.scroll.grid(row=4, column=4, sticky='nse')
+        self.tabla.configure(yscrollcommand=self.scroll.set)
 
         self.tabla.heading('#0', text='ID')
         self.tabla.heading('#1', text='NOMBRE')
         self.tabla.heading('#2', text='DURACION')
         self.tabla.heading('#3', text='GENERO')
 
-        self.tabla.insert('', 0, text='1',
-                          values=('Los Vengadores', '2.35', 'Accion'))
+        # self.tabla.insert('', 0, text='1',
+        #                   values=('Los Vengadores', '2.35', 'Accion'))
+
+        for p in self.lista_peliculas:
+            self.tabla.insert('', 0, text=p[0],
+                              values=(p[1], p[2], p[3]))
 
         # Boton de editar
         self.boton_editar = tk.Button(self, text="Editar")
