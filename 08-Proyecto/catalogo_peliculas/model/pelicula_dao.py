@@ -90,10 +90,16 @@ def listar():
     return lista_peliculas
 
 def editar(pelicula, id_pelicula):
-    conexion = ConexionDB
+    conexion = ConexionDB()
 
-    sql = f'''
-        UPDATE peliculas 
-        SET nombre = '{pelicula.nombre}',
-         
-    '''
+    sql = f"""UPDATE peliculas 
+        SET nombre = '{pelicula.nombre}', duracion = '{pelicula.duracion}', genero = '{pelicula.genero}'
+        WHERE id_pelicula = {id_pelicula}"""
+
+    try:
+        conexion.cursor.execute(sql)
+        conexion.cerrar()
+    except:
+        titulo = 'Edicion de datos'
+        mensaje = 'No se a podido editar este registro'
+        messagebox.showerror(titulo, pelicula.nombre)
